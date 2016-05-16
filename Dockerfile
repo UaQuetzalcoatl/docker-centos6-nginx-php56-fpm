@@ -89,6 +89,7 @@ RUN set -xe \
 	&& make install \
 	&& make clean
 
+RUN yum install -y libcurl libcurl-devel zlib-devel
 #install php
 RUN set -xe \
 	&& cd /tmp/source \
@@ -107,8 +108,11 @@ RUN set -xe \
  		--with-mcrypt \
 		--with-pdo-mysql \
 		--enable-opcache \
+		--enable-zip \
+		--with-zlib \
 		--with-pear \
 		--with-openssl \
+		--with-curl \
 		--with-oci8=shared,instantclient,/usr/lib/oracle/11.2/client64/lib \
 	&& make \
 	&& make install \
@@ -139,7 +143,7 @@ RUN set -xe \
     && mv phpunit.phar /usr/local/bin/phpunit
 
 
-#enable opcache
+#enable opcache && set default timezone
 RUN set -xe \
 	&& echo opcache.enable=1 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
 	&& echo opcache.enable_cli=1 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
@@ -147,7 +151,8 @@ RUN set -xe \
 	&& echo opcache.interned_strings_buffer=8 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
 	&& echo opcache.max_accelerated_files=4000 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
 	&& echo opcache.revalidate_freq=60 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
-	&& echo opcache.fast_shutdown=1 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development
+	&& echo opcache.fast_shutdown=1 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
+	&& echo "date.timezone = UTC" | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development
 
 
 # install pecl extensions
@@ -172,7 +177,13 @@ RUN set -x; \
 # there is an issue with running cron in the container
 RUN sed -i '/session\s*required\s*pam_loginuid.so/d' /etc/pam.d/crond
 
-EXPOSE 80
+# install git for composer 
+RUN yum install -y git
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+RUN rpm -Uvh http://yum.newrelic.com/pub/newrelic/el5/x86_64/newrelic-repo-5-3.noarch.rpm
+RUN yum -y install newrelic-php5
 
 RUN echo "while true; do sleep 1000; done" >> /tmp/start.sh
 RUN chmod +x /tmp/start.sh
@@ -184,5 +195,5 @@ RUN chmod +x /etc/init.d/nginx
 RUN chmod +x /etc/init.d/php-fpm
 
 RUN rm -Rf /tmp/oracle* /tmp/source /tmp/gearmand*
-
-CMD ["service nginx start & service php-fpm start"]
+EXPOSE 80
+CMD ["/bin/bash", "/tmp/start.sh"]
