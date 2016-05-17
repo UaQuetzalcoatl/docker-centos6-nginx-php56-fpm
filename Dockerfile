@@ -128,6 +128,9 @@ RUN set -xe \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/php.ini \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/shared/php.ini-production \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/shared/php.ini-development \
+	&& sed -i "s/^variables_order.*/variables_order = \"EGPCS\"/" $PHP_INI_DIR/php.ini \
+	&& sed -i "s/^variables_order.*/variables_order = \"EGPCS\"/" $PHP_INI_DIR/shared/php.ini-production \
+	&& sed -i "s/^variables_order.*/variables_order = \"EGPCS\"/" $PHP_INI_DIR/shared/php.ini-development \
 	&& cd /
 
 	#&& rm -Rf /tmp/source
