@@ -178,11 +178,11 @@ RUN sed -i '/session\s*required\s*pam_loginuid.so/d' /etc/pam.d/crond
 
 # install mongo shell
 RUN set -x; \
-	echo "[mongodb-org-2.6]" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
-	echo "name=MongoDB 2.6 Repository" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
-	echo "baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
-	echo "gpgcheck=0" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
-	echo "enabled=1" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo;
+	echo "[mongodb-org-2.4]" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo; \
+	echo "name=MongoDB 2.4 Repository" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo; \
+	echo "baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo; \
+	echo "gpgcheck=0" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo; \
+	echo "enabled=1" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo;
 	
 RUN yum install -y mongodb-org-shell
 
@@ -193,6 +193,8 @@ RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/lo
 
 RUN rpm -Uvh http://yum.newrelic.com/pub/newrelic/el5/x86_64/newrelic-repo-5-3.noarch.rpm
 RUN yum -y install newrelic-php5
+
+RUN yum install -y mysql
 
 RUN echo "while true; do sleep 1000; done" >> /tmp/start.sh
 RUN chmod +x /tmp/start.sh
