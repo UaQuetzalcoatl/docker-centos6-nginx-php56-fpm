@@ -30,7 +30,6 @@ RUN yum update -y \
 		epel-release \
 		wget \
 		curl \
-		mongodb \
 		rsyslog \
 		openssl-devel \
 		uuid \
@@ -177,7 +176,17 @@ RUN set -x; \
 # there is an issue with running cron in the container
 RUN sed -i '/session\s*required\s*pam_loginuid.so/d' /etc/pam.d/crond
 
-# install git for composer 
+# install mongo shell
+RUN set -x; \
+	echo "[mongodb-org-2.6]" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
+	echo "name=MongoDB 2.6 Repository" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
+	echo "baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
+	echo "gpgcheck=0" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
+	echo "enabled=1" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo;
+	
+RUN yum install -y mongodb-org-shell
+
+# install git
 RUN yum install -y git
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
