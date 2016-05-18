@@ -126,6 +126,10 @@ RUN set -xe \
 	&& cd /usr/local/php/etc \
 	&& cp php-fpm.conf.default php-fpm.conf \
 	&& sed -i "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/" php-fpm.conf \
+	&& sed -i "s/;listen.user = web/listen.user = web/" php-fpm.conf \
+	&& sed -i "s/;listen.group = web/listen.group = web/" php-fpm.conf \
+	&& sed -i "s/;listen.mode = 0660/listen.mode = 0660/" php-fpm.conf \
+	&& echo "clear_env = no" >> /usr/local/php/etc/php-fpm.conf \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/php.ini \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/shared/php.ini-production \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/shared/php.ini-development \
@@ -134,7 +138,7 @@ RUN set -xe \
 	&& sed -i "s/^variables_order.*/variables_order = \"EGPCS\"/" $PHP_INI_DIR/shared/php.ini-development \
 	&& cd /
 
-	#&& rm -Rf /tmp/source
+RUN touch /var/run/php-fpm.sock && chown web:web /var/run/php-fpm.sock
 
 RUN cp /usr/local/php/sbin/php-fpm /usr/local/php/bin/php-fpm
 ENV PATH=$PATH:/usr/local/php/bin:/usr/local/nginx/sbin
