@@ -125,6 +125,7 @@ RUN set -xe \
 	&& cp php.ini-development $PHP_INI_DIR/shared/php.ini-development \
 	&& cd /usr/local/php/etc \
 	&& cp php-fpm.conf.default php-fpm.conf \
+	&& sed -i "s/listen = 127.0.0.1:9000/listen = \/var\/run\/php-fpm.sock/" php-fpm.conf \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/php.ini \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/shared/php.ini-production \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/shared/php.ini-development \
@@ -209,5 +210,13 @@ RUN chmod +x /etc/init.d/nginx
 RUN chmod +x /etc/init.d/php-fpm
 
 RUN rm -Rf /tmp/oracle* /tmp/source /tmp/gearmand*
+
+# install nodejs for garden
+RUN curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -
+RUN yum install -y nodejs
+
+RUN chkconfig nginx off
+RUN chkconfig php-fpm off
+
 EXPOSE 80
 CMD ["/bin/bash", "/tmp/start.sh"]
