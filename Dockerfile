@@ -129,6 +129,10 @@ RUN set -xe \
 	&& sed -i "s/;listen.user = web/listen.user = web/" php-fpm.conf \
 	&& sed -i "s/;listen.group = web/listen.group = web/" php-fpm.conf \
 	&& sed -i "s/;listen.mode = 0660/listen.mode = 0660/" php-fpm.conf \
+	&& sed -i "s/pm.max_children.*/pm.max_children = 8/" php-fpm.conf \
+	&& sed -i "s/pm.start_servers.*/pm.start_servers = 2/" php-fpm.conf \
+	&& sed -i "s/pm.min_spare_servers.*/pm.min_spare_servers = 2/" php-fpm.conf \
+	&& sed -i "s/pm.max_spare_servers.*/pm.max_spare_servers = 4/" php-fpm.conf \
 	&& echo "clear_env = no" >> /usr/local/php/etc/php-fpm.conf \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/php.ini \
 	&& sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" $PHP_INI_DIR/shared/php.ini-production \
@@ -174,12 +178,7 @@ RUN set -ex;\
     echo extension=oci8.so | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development; \
     cp $PHP_INI_DIR/php.ini $PHP_INI_DIR/php-cli.ini
 
-
-RUN set -x; \
-	chown web:web /var/spool/cron/web; \
-	chmod 644 /var/spool/cron/web; \
-	yum install -y cronie; \
-	touch /var/log/cron
+RUN yum install -y cronie
 
 # there is an issue with running cron in the container
 RUN sed -i '/session\s*required\s*pam_loginuid.so/d' /etc/pam.d/crond
@@ -215,7 +214,7 @@ RUN chmod +x /etc/init.d/php-fpm
 
 RUN rm -Rf /tmp/oracle* /tmp/source /tmp/gearmand*
 
-# install nodejs for garden
+# # install nodejs for garden
 RUN curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -
 RUN yum install -y nodejs
 
