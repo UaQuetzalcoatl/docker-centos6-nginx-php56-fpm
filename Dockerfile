@@ -169,7 +169,7 @@ RUN set -xe \
 # install pecl extensions
 RUN set -ex;\
     pecl channel-update pecl.php.net;\
-    yes "" | pecl install -f mongo-1.5.8;\
+    yes "" | pecl install -f mongo-1.6.14;\
     yes "" | pecl install -f gearman-1.1.2;\
     yes "" | pecl install -f apcu-4.0.11;\
     echo extension=mongo.so | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development; \
