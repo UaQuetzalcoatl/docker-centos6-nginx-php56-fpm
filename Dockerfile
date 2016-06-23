@@ -214,10 +214,6 @@ RUN chmod +x /etc/init.d/php-fpm
 
 RUN rm -Rf /tmp/oracle* /tmp/source /tmp/gearmand*
 
-# # install nodejs for garden
-RUN curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -
-RUN yum install -y nodejs
-
 RUN chkconfig nginx off
 RUN chkconfig php-fpm off
 
