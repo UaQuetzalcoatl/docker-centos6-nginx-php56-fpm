@@ -163,7 +163,8 @@ RUN set -xe \
 	&& echo opcache.revalidate_freq=60 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
 	&& echo opcache.validate_timestamps=0 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
 	&& echo opcache.max_wasted_percentage=10 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
-	&& echo "date.timezone = UTC" | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development
+	&& echo "date.timezone = UTC" | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
+	&& echo zend_extension=opcache.so | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development
 
 
 # install pecl extensions
