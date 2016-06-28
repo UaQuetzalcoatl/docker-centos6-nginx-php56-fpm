@@ -106,7 +106,6 @@ RUN set -xe \
  		--enable-bcmath \
  		--with-mcrypt \
 		--with-pdo-mysql \
-		--enable-opcache \
 		--enable-zip \
 		--with-zlib \
 		--with-pear \
@@ -162,7 +161,8 @@ RUN set -xe \
 	&& echo opcache.interned_strings_buffer=8 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
 	&& echo opcache.max_accelerated_files=4000 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
 	&& echo opcache.revalidate_freq=60 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
-	&& echo opcache.fast_shutdown=1 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
+	&& echo opcache.validate_timestamps=0 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
+	&& echo opcache.max_wasted_percentage=10 | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development \
 	&& echo "date.timezone = UTC" | tee -a $PHP_INI_DIR/php.ini $PHP_INI_DIR/shared/php.ini-production $PHP_INI_DIR/shared/php.ini-development
 
 
