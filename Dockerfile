@@ -139,6 +139,8 @@ RUN set -xe \
 	&& sed -i "s/^variables_order.*/variables_order = \"EGPCS\"/" $PHP_INI_DIR/php.ini \
 	&& sed -i "s/^variables_order.*/variables_order = \"EGPCS\"/" $PHP_INI_DIR/shared/php.ini-production \
 	&& sed -i "s/^variables_order.*/variables_order = \"EGPCS\"/" $PHP_INI_DIR/shared/php.ini-development \
+	&& sed -i "s/^expose_php.*/expose_php = Off/" $PHP_INI_DIR/shared/php.ini-production \
+	&& sed -i "s/^expose_php.*/expose_php = Off/" $PHP_INI_DIR/shared/php.ini-development \
 	&& cd /
 
 RUN touch /var/run/php-fpm.sock && chown web:web /var/run/php-fpm.sock
