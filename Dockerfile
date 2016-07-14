@@ -69,7 +69,7 @@ RUN cd tmp && tar -xzf gearmand-1.1.12.tar.gz \
 
 # install gearman
 ENV GEARMAN_LIB_DIR=/usr/lib64
-ENV GEARMAN_INC_DIR=/usr/lib64
+ENV GEARMAN_INC_DIR=/usr/local/include
 
 #install nginx
 RUN set -xe \
@@ -188,11 +188,11 @@ RUN sed -i '/session\s*required\s*pam_loginuid.so/d' /etc/pam.d/crond
 
 # install mongo shell
 RUN set -x; \
-	echo "[mongodb-org-2.4]" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo; \
-	echo "name=MongoDB 2.4 Repository" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo; \
-	echo "baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo; \
-	echo "gpgcheck=0" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo; \
-	echo "enabled=1" | tee -a /etc/yum.repos.d/mongodb-org-2.4.repo;
+	echo "[mongodb-org-2.6]" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
+	echo "name=MongoDB 2.6 Repository" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
+	echo "baseurl=http://downloads-distro.mongodb.org/repo/redhat/os/x86_64/" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
+	echo "gpgcheck=0" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo; \
+	echo "enabled=1" | tee -a /etc/yum.repos.d/mongodb-org-2.6.repo;
 	
 RUN yum install -y mongodb-org-shell
 
