@@ -1,6 +1,6 @@
 FROM centos6-ssh-base:latest
 
-ENV PHP_VERSION 5.6.21
+ENV PHP_VERSION 5.6.23
 ENV PHP_INI_DIR /usr/local/php
 
 # update & install dependencies
