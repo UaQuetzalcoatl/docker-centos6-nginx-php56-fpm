@@ -220,5 +220,9 @@ RUN rm -Rf /tmp/oracle* /tmp/source /tmp/gearmand*
 RUN chkconfig nginx off
 RUN chkconfig php-fpm off
 
+# install supervisor
+RUN yum install -y python-setuptools && easy_install supervisor
+RUN ln -s /usr/local/php/bin/php /usr/bin/php
+
 EXPOSE 80
 CMD ["/bin/bash", "/tmp/start.sh"]
